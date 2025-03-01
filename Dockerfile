@@ -6,20 +6,31 @@ RUN apt-get update && \
     gdb \
     clang \
     cmake \
+    vim \
+    sudo \
+    less \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /home/tony
 
-ARG USER_ID
-ARG GROUP_ID
+
+
+
+ARG DEV_USER=dev
+ARG DEV_GROUP=dev
+ARG DEV_UID=1000
+ARG DEV_GID=1000
 
 # Create a group and user with the specified UID and GID
 # On a mac, this is apparently not needed.
-# RUN groupadd -g ${GROUP_ID} tony
-RUN useradd -m -u ${USER_ID} -g ${GROUP_ID} -s /bin/bash tony
-RUN echo 'tony ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN groupadd -g ${DEV_GID} {DEV_GROUP}
+RUN useradd -m -u ${DEV_UID} -g ${DEV_GID} -s /bin/bash ${DEV_USER}
+RUN echo 'DEV_USER ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-USER tony
+# Change ownership to the non-root user
+RUN chown -R ${DEV_UID}:${DEV_GID} /home/${DEV_USER}
 
+USER ${DEV_USER}
+
+WORKDIR /home/${DEV_USER}
 
 CMD ["/bin/bash"]
