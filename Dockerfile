@@ -16,9 +16,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-opencv \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y --no-install-recommends \
-    libglib2.0-0 \
-    libx11-xcb1
+RUN apt-get update && \
+    apt-get install -y libqt5gui5 && \
+    rm -rf /var/lib/apt/lists/*
+
+    # Flip this on if you need to debug.
+#ENV QT_DEBUG_PLUGINS=1    
 
 ARG USER_NAME=tony
 ARG GROUP_NAME=tony
@@ -27,12 +30,6 @@ ARG USER_ID
 ARG GROUP_ID
 
 WORKDIR /home/${USER_NAME}
-
-# Create a group and user with the specified UID and GID
-# On a mac, this is apparently not needed.
-# RUN groupadd -g ${GROUP_ID} tony
-# RUN useradd -m -u ${USER_ID} -g ${GROUP_ID} -s /bin/bash ${DEV_USER}
-# RUN echo 'tony ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Create a group and user with the specified UID and GID
 # On a mac, this is apparently not needed.
