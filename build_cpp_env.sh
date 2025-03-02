@@ -1,9 +1,7 @@
 #!/bin/bash
 
 docker build \
-    --build-arg USER_ID=1001\
-    --build-arg GROUP_ID=1001\
-    --build-arg DEV_USER=tony\
-    --build-arg DEV_GROUP=tony\
+    --build-arg USER_ID=$(id -u) \
+    --build-arg GROUP_ID=$(id -g) \
     -t cpp_env \
     .
